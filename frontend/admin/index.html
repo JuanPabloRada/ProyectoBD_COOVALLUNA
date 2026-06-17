@@ -1,18 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>COOVALLUNA - Administrador</title>
-  <link rel="stylesheet" href="../css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA Admin</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Panel de Administrador</h1>
-  </header>
-  <main>
-    <!-- TODO (equipo): modulos de agencias, empleados, asociados, reportes, usuarios y auditoria -->
-    <p>Aqui van los modulos de gestion completa: agencias, empleados, asociados, reportes y usuarios.</p>
-  </main>
-  <script src="../js/api.js"></script>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="logo">
+            COOVALLUNA
+        </div>
+
+        <nav>
+            <a class="active">📊 Dashboard</a>
+            <a>👥 Asociados</a>
+            <a>💰 Créditos</a>
+            <a>🏦 Cuentas</a>
+            <a>📈 Reportes</a>
+            <a>⚙ Sistema</a>
+            <a>👤 Usuarios</a>
+        </nav>
+    </aside>
+
+    <main class="content">
+
+        <header class="header">
+            <h2>Dashboard Administrador</h2>
+
+            <div class="user">
+                Admin
+            </div>
+        </header>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3 id="asociados">0</h3>
+                <p>Asociados activos</p>
+            </div>
+
+            <div class="card">
+                <h3 id="creditos">0</h3>
+                <p>Créditos vigentes</p>
+            </div>
+
+            <div class="card">
+                <h3 id="cartera">$0</h3>
+                <p>Cartera total</p>
+            </div>
+
+            <div class="card danger">
+                <h3 id="mora">0</h3>
+                <p>En mora</p>
+            </div>
+
+        </section>
+
+        <section class="dashboard-grid">
+
+            <div class="chart-card">
+                <h3>Créditos por mes</h3>
+                <canvas id="creditChart"></canvas>
+            </div>
+
+            <div class="table-card">
+                <h3>Movimientos recientes</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="movimientos">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <section class="alert-card">
+            <h3>Alertas de mora</h3>
+
+            <ul id="alertas"></ul>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="dashboard.js"></script>
+
 </body>
 </html>
