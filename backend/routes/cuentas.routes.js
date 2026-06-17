@@ -9,36 +9,88 @@ function asyncHandler(fn) {
 
 // GET /api/cuentas
 router.get('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): SELECT sobre CUENTA_AHORRO
-  const query = '';
+
+  const query = `
+    SELECT
+      numero_cuenta,
+      fecha_apertura,
+      estado,
+      cedula_asociado,
+      codigo_agencia
+    FROM cuenta_ahorro
+    ORDER BY numero_cuenta
+  `;
+
   const result = await pool.query(query);
+
   res.json(result.rows);
+
 }));
 
 // POST /api/cuentas
 router.post('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT parametrizado sobre CUENTA_AHORRO
-  const query = '';
-  const values = [];
+
+  const {
+    numero_cuenta,
+    fecha_apertura,
+    estado,
+    cedula_asociado,
+    codigo_agencia
+  } = req.body;
+
+  const query = `
+    INSERT INTO cuenta_ahorro(
+      numero_cuenta,
+      fecha_apertura,
+      estado,
+      cedula_asociado,
+      codigo_agencia
+    )
+    VALUES($1,$2,$3,$4,$5)
+    RETURNING *
+  `;
+
+  const values = [
+    numero_cuenta,
+    fecha_apertura,
+    estado,
+    cedula_asociado,
+    codigo_agencia
+  ];
+
   const result = await pool.query(query, values);
+
   res.status(201).json(result.rows[0]);
+
 }));
 
-// POST /api/cuentas/:numero_cuenta/movimientos
-router.post('/:numero_cuenta/movimientos', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT parametrizado sobre MOVIMIENTO (deposito, retiro, transferencia)
-  const query = '';
-  const values = [];
-  const result = await pool.query(query, values);
-  res.status(201).json(result.rows[0]);
-}));
-
-// GET /api/cuentas/:numero_cuenta/saldo
+// GET saldo
 router.get('/:numero_cuenta/saldo', asyncHandler(async (req, res) => {
-  // TODO (equipo): SUM de movimientos para calcular el saldo dinamicamente
-  const query = '';
-  const result = await pool.query(query, [req.params.numero_cuenta]);
-  res.json(result.rows[0]);
+
+  const query = `
+    SELECT
+      numero_cuenta,
+      COALESCE(
+        SUM(
+          CASE
+            WHEN tipo_movimiento IN ('DEPOSITO','CONSIGNACION')
+              THEN valor_transaccion
+            WHEN tipo_movimiento IN ('RETIRO','TRANSFERENCIA')
+              THEN -valor_transaccion
+            ELSE 0
+          END
+        ),0
+      ) AS saldo
+    FROM movimiento
+    WHERE numero_cuenta = $1
+    GROUP BY numero_cuenta
+  `;
+
+  const result =
+    await pool.query(query,[req.params.numero_cuenta]);
+
+  res.json(result.rows[0] || { saldo: 0 });
+
 }));
 
 module.exports = router;

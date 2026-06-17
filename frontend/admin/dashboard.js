@@ -1,71 +1,113 @@
-async function cargarDashboard(){
+const API = "http://localhost:3000/api";
 
-    try{
+async function cargarDashboard() {
 
-        const res = await fetch(
-            "http://localhost:3000/api/dashboard"
-        );
+    try {
 
-        const data = await res.json();
+        const [
+            asociadosRes,
+            creditosRes,
+            cuentasRes,
+            empleadosRes
+        ] = await Promise.all([
+            fetch(`${API}/asociados`),
+            fetch(`${API}/creditos`),
+            fetch(`${API}/cuentas`),
+            fetch(`${API}/empleados`)
+        ]);
+
+        const asociados = await asociadosRes.json();
+        const creditos = await creditosRes.json();
+        const cuentas = await cuentasRes.json();
+        const empleados = await empleadosRes.json();
 
         document.getElementById("asociados").textContent =
-            data.asociados;
+            asociados.length;
 
         document.getElementById("creditos").textContent =
-            data.creditos;
+            creditos.length;
+
+        document.getElementById("cuentas").textContent =
+            cuentas.length;
+
+        document.getElementById("empleados").textContent =
+            empleados.length;
+
+        const cartera = creditos.reduce((sum, c) =>
+            sum + Number(c.valor_aprobado || 0), 0);
 
         document.getElementById("cartera").textContent =
-            "$" + data.cartera.toLocaleString();
+            "$ " + cartera.toLocaleString("es-CO");
+
+        const mora = creditos.filter(c =>
+            c.estado_credito === "EN_MORA"
+        ).length;
 
         document.getElementById("mora").textContent =
-            data.mora;
+            mora;
 
-        const tbody =
-            document.getElementById("movimientos");
+        cargarTabla(creditos);
+        crearGrafica(creditos);
 
-        data.movimientos.forEach(m => {
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${m.cuenta}</td>
-                    <td>${m.tipo}</td>
-                    <td>$${m.valor}</td>
-                </tr>
-            `;
-
-        });
-
-        const alertas =
-            document.getElementById("alertas");
-
-        data.alertas.forEach(a => {
-
-            alertas.innerHTML += `
-                <li>${a}</li>
-            `;
-
-        });
-
-        new Chart(
-            document.getElementById("creditChart"),
-            {
-                type:"line",
-                data:{
-                    labels:data.grafica.labels,
-                    datasets:[{
-                        label:"Créditos",
-                        data:data.grafica.data,
-                        borderColor:"#2563EB",
-                        fill:false
-                    }]
-                }
-            }
-        );
-
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
-
 }
+
+function cargarTabla(creditos){
+
+    const tbody =
+        document.getElementById("tablaCreditos");
+
+    tbody.innerHTML = "";
+
+    creditos.slice(0,5).forEach(c => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.numero_radicado}</td>
+                <td>${c.linea_credito}</td>
+                <td>${c.estado_credito}</td>
+                <td>
+                    $${Number(
+                        c.valor_aprobado || 0
+                    ).toLocaleString("es-CO")}
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function crearGrafica(creditos){
+
+    const estados = {};
+
+    creditos.forEach(c => {
+
+        estados[c.estado_credito] =
+            (estados[c.estado_credito] || 0) + 1;
+
+    });
+
+    new Chart(
+        document.getElementById("chartEstados"),
+        {
+            type:"doughnut",
+            data:{
+                labels:Object.keys(estados),
+                datasets:[{
+                    data:Object.values(estados)
+                }]
+            }
+        }
+    );
+}
+
+document.querySelector(".logout")
+.addEventListener("click", () => {
+
+    window.location.href = "../index.html";
+
+});
 
 cargarDashboard();

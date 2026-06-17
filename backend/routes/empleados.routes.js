@@ -9,28 +9,76 @@ function asyncHandler(fn) {
 
 // GET /api/empleados
 router.get('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): SELECT sobre EMPLEADO
-  const query = '';
+
+  const query = `
+    SELECT
+      cedula_empleado,
+      nombres,
+      apellidos,
+      correo_corporativo,
+      estado_laboral,
+      codigo_cargo,
+      codigo_agencia
+    FROM empleado
+    ORDER BY cedula_empleado
+  `;
+
   const result = await pool.query(query);
+
   res.json(result.rows);
+
 }));
 
 // POST /api/empleados
 router.post('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT parametrizado sobre EMPLEADO
-  const query = '';
-  const values = [];
-  const result = await pool.query(query, values);
-  res.status(201).json(result.rows[0]);
-}));
 
-// PUT /api/empleados/:cedula
-router.put('/:cedula', asyncHandler(async (req, res) => {
-  // TODO (equipo): UPDATE parametrizado sobre EMPLEADO (cargo, agencia, supervisor, estado)
-  const query = '';
-  const values = [];
+  const {
+    cedula_empleado,
+    nombres,
+    apellidos,
+    correo_corporativo,
+    estado_laboral,
+    codigo_cargo,
+    codigo_agencia,
+    contrasena
+  } = req.body;
+
+  const query = `
+    INSERT INTO empleado(
+      cedula_empleado,
+      nombres,
+      apellidos,
+      correo_corporativo,
+      estado_laboral,
+      codigo_cargo,
+      codigo_agencia,
+      contrasena,
+      fecha_ingreso,
+      salario_base
+    )
+    VALUES(
+      $1,$2,$3,$4,$5,$6,$7,$8,
+      CURRENT_DATE,
+      1000000
+    )
+    RETURNING *
+  `;
+
+  const values = [
+    cedula_empleado,
+    nombres,
+    apellidos,
+    correo_corporativo,
+    estado_laboral,
+    codigo_cargo,
+    codigo_agencia,
+    contrasena
+  ];
+
   const result = await pool.query(query, values);
-  res.json(result.rows[0]);
+
+  res.status(201).json(result.rows[0]);
+
 }));
 
 module.exports = router;

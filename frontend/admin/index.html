@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COOVALLUNA Admin</title>
+    <title>COOVALLUNA - Dashboard</title>
 
     <link rel="stylesheet" href="dashboard.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -17,87 +17,104 @@
 <div class="layout">
 
     <aside class="sidebar">
+
         <div class="logo">
-            COOVALLUNA
+            <h1>COOVALLUNA</h1>
+            <p>Administrador</p>
         </div>
 
         <nav>
             <a class="active">📊 Dashboard</a>
             <a>👥 Asociados</a>
-            <a>💰 Créditos</a>
+            <a>💳 Créditos</a>
             <a>🏦 Cuentas</a>
-            <a>📈 Reportes</a>
-            <a>⚙ Sistema</a>
-            <a>👤 Usuarios</a>
+            <a>👔 Empleados</a>
+            <a>📑 Reportes</a>
         </nav>
+
     </aside>
 
     <main class="content">
 
         <header class="header">
-            <h2>Dashboard Administrador</h2>
-
-            <div class="user">
-                Admin
+            <div>
+                <h2>Dashboard</h2>
+                <p>Resumen general de la cooperativa</p>
             </div>
+
+            <button class="logout">
+                Cerrar sesión
+            </button>
         </header>
 
         <section class="cards">
 
             <div class="card">
+                <span>👥</span>
                 <h3 id="asociados">0</h3>
-                <p>Asociados activos</p>
+                <p>Asociados</p>
             </div>
 
             <div class="card">
+                <span>💳</span>
                 <h3 id="creditos">0</h3>
-                <p>Créditos vigentes</p>
+                <p>Créditos</p>
             </div>
 
             <div class="card">
+                <span>🏦</span>
+                <h3 id="cuentas">0</h3>
+                <p>Cuentas</p>
+            </div>
+
+            <div class="card">
+                <span>👔</span>
+                <h3 id="empleados">0</h3>
+                <p>Empleados</p>
+            </div>
+
+            <div class="card primary">
+                <span>💰</span>
                 <h3 id="cartera">$0</h3>
-                <p>Cartera total</p>
+                <p>Cartera Total</p>
             </div>
 
             <div class="card danger">
+                <span>⚠️</span>
                 <h3 id="mora">0</h3>
-                <p>En mora</p>
+                <p>Créditos en Mora</p>
             </div>
 
         </section>
 
-        <section class="dashboard-grid">
+        <section class="grid">
 
             <div class="chart-card">
-                <h3>Créditos por mes</h3>
-                <canvas id="creditChart"></canvas>
+                <h3>Estados de Créditos</h3>
+                <canvas id="chartEstados"></canvas>
             </div>
 
             <div class="table-card">
-                <h3>Movimientos recientes</h3>
+
+                <h3>Últimos Créditos</h3>
 
                 <table>
+
                     <thead>
                         <tr>
-                            <th>Cuenta</th>
-                            <th>Tipo</th>
+                            <th>Radicado</th>
+                            <th>Línea</th>
+                            <th>Estado</th>
                             <th>Valor</th>
                         </tr>
                     </thead>
 
-                    <tbody id="movimientos">
-                    </tbody>
+                    <tbody id="tablaCreditos"></tbody>
 
                 </table>
 
             </div>
 
-        </section>
-
-        <section class="alert-card">
-            <h3>Alertas de mora</h3>
-
-            <ul id="alertas"></ul>
         </section>
 
     </main>

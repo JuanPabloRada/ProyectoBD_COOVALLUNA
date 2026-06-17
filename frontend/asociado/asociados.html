@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asociados - COOVALLUNA</title>
+
+    <link rel="stylesheet" href="asociados.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <i class="fa-solid fa-building-columns"></i>
+            <h2>COOVALLUNA</h2>
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                <i class="fa-solid fa-chart-line"></i>
+                Dashboard
+            </a>
+
+            <a class="active">
+                <i class="fa-solid fa-users"></i>
+                Asociados
+            </a>
+
+            <a href="empleados.html">
+                <i class="fa-solid fa-user-tie"></i>
+                Empleados
+            </a>
+
+            <a href="cuentas.html">
+                <i class="fa-solid fa-piggy-bank"></i>
+                Cuentas
+            </a>
+
+            <a href="creditos.html">
+                <i class="fa-solid fa-credit-card"></i>
+                Créditos
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main>
+
+        <header>
+
+            <div>
+                <h1>Gestión de Asociados</h1>
+                <p>Administración de asociados de la cooperativa</p>
+            </div>
+
+            <button id="btnNuevo">
+                <i class="fa-solid fa-plus"></i>
+                Nuevo Asociado
+            </button>
+
+        </header>
+
+        <section class="stats">
+
+            <div class="card">
+                <span>Total</span>
+                <h2 id="totalAsociados">0</h2>
+            </div>
+
+            <div class="card">
+                <span>Activos</span>
+                <h2 id="activos">0</h2>
+            </div>
+
+            <div class="card">
+                <span>Suspendidos</span>
+                <h2 id="suspendidos">0</h2>
+            </div>
+
+            <div class="card">
+                <span>Retirados</span>
+                <h2 id="retirados">0</h2>
+            </div>
+
+        </section>
+
+        <section class="filters">
+
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Buscar por cédula o nombre">
+
+            <select id="estadoFilter">
+
+                <option value="">
+                    Todos los estados
+                </option>
+
+                <option value="ACTIVO">
+                    Activo
+                </option>
+
+                <option value="SUSPENDIDO">
+                    Suspendido
+                </option>
+
+                <option value="RETIRADO">
+                    Retirado
+                </option>
+
+            </select>
+
+        </section>
+
+        <section class="table-container">
+
+            <table>
+
+                <thead>
+
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Municipio</th>
+                    <th>Afiliación</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="asociadosBody">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="asociados.js"></script>
+
+</body>
+</html>

@@ -9,37 +9,75 @@ function asyncHandler(fn) {
 
 // GET /api/creditos
 router.get('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): SELECT sobre CREDITO
-  const query = '';
+
+  const query = `
+    SELECT
+      numero_radicado,
+      valor_solicitado,
+      valor_aprobado,
+      tasa_interes_mensual,
+      plazo_meses,
+      estado_credito,
+      linea_credito,
+      cedula_asociado,
+      cedula_empleado
+    FROM credito
+    ORDER BY numero_radicado
+  `;
+
   const result = await pool.query(query);
+
   res.json(result.rows);
+
 }));
 
 // POST /api/creditos
 router.post('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT parametrizado sobre CREDITO
-  const query = '';
-  const values = [];
-  const result = await pool.query(query, values);
-  res.status(201).json(result.rows[0]);
-}));
 
-// PUT /api/creditos/:numero_radicado
-router.put('/:numero_radicado', asyncHandler(async (req, res) => {
-  // TODO (equipo): UPDATE parametrizado sobre CREDITO (ej: cambiar estado_credito)
-  const query = '';
-  const values = [];
-  const result = await pool.query(query, values);
-  res.json(result.rows[0]);
-}));
+  const {
+    numero_radicado,
+    valor_solicitado,
+    valor_aprobado,
+    tasa_interes_mensual,
+    plazo_meses,
+    estado_credito,
+    linea_credito,
+    cedula_asociado,
+    cedula_empleado
+  } = req.body;
 
-// POST /api/creditos/:numero_radicado/pagos
-router.post('/:numero_radicado/pagos', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT/UPDATE parametrizado sobre PAGO_CUOTA
-  const query = '';
-  const values = [];
+  const query = `
+    INSERT INTO credito (
+      numero_radicado,
+      valor_solicitado,
+      valor_aprobado,
+      tasa_interes_mensual,
+      plazo_meses,
+      estado_credito,
+      linea_credito,
+      cedula_asociado,
+      cedula_empleado
+    )
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    RETURNING *
+  `;
+
+  const values = [
+    numero_radicado,
+    valor_solicitado,
+    valor_aprobado,
+    tasa_interes_mensual,
+    plazo_meses,
+    estado_credito,
+    linea_credito,
+    cedula_asociado,
+    cedula_empleado
+  ];
+
   const result = await pool.query(query, values);
+
   res.status(201).json(result.rows[0]);
+
 }));
 
 module.exports = router;
