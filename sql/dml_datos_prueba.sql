@@ -1,0 +1,7 @@
+-- DML de datos de prueba
+-- Minimos exigidos por la guia (Entrega Final):
+-- 10 asociados (entre activos y fundadores), 4 beneficiarios, 3 agencias,
+-- 6 empleados con jerarquia de supervision, 5 cuentas con 15 movimientos,
+-- 4 creditos en diferentes estados con planes de pago parciales, 2 codeudorias.
+--
+-- TODO (equipo): escribir aqui los INSERT con los datos de prueba.

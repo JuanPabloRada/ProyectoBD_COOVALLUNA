@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Iniciar Sesión</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Iconos -->
+    <script src="https://kit.fontawesome.com/yourkit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Panel Izquierdo -->
+        <div class="left-panel">
+            <img src="img/logo.png" alt="COOVALLUNA" class="logo">
+
+            <h1>Bienvenido a COOVALLUNA</h1>
+
+            <p>
+                Gestiona tus productos y servicios financieros
+                de forma segura y rápida.
+            </p>
+        </div>
+
+        <!-- Login -->
+        <div class="right-panel">
+
+            <div class="login-card">
+
+                <h2>Iniciar Sesión</h2>
+                <p class="subtitle">
+                    Ingresa tus credenciales
+                </p>
+
+                <form id="loginForm">
+
+                    <div class="input-group">
+                        <label>Número de cédula</label>
+                        <input
+                            type="text"
+                            id="cedula"
+                            placeholder="Ej: 123456789"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label>Contraseña</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="••••••••"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">
+                        Ingresar
+                    </button>
+
+                    <a href="#" class="forgot">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/login.js"></script>
+
+</body>
+</html>
