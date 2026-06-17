@@ -1,66 +1,44 @@
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  const cedula   = document.getElementById("cedula").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    const cedula = document.getElementById("cedula").value.trim();
-    const password = document.getElementById("password").value.trim();
+  if (!cedula || !password) {
+    alert("Complete todos los campos");
+    return;
+  }
 
-    if (!cedula || !password) {
-        alert("Complete todos los campos");
-        return;
+  try {
+    const response = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cedula, password }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Guardar nombre en sessionStorage para usarlo en los dashboards
+      sessionStorage.setItem("coovalluna_nombre", data.nombre);
+      sessionStorage.setItem("coovalluna_rol",    data.rol);
+
+      switch (data.rol) {
+        case "admin":    window.location.href = "admin/index.html";    break;
+        case "asesor":   window.location.href = "asesor/index.html";   break;
+        case "asociado": window.location.href = "asociado/index.html"; break;
+        default:
+          alert("Rol desconocido. Contacte soporte.");
+      }
+    } else {
+      // El servidor devuelve data.mensaje cuando success = false
+      alert(data.mensaje || "Credenciales incorrectas");
     }
 
-    try {
-
-        const response = await fetch(
-            "http://localhost:3000/api/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    cedula,
-                    password
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if(data.success){
-
-            switch(data.rol){
-
-                case "admin":
-                    window.location.href =
-                        "admin/index.html";
-                    break;
-
-                case "asesor":
-                    window.location.href =
-                        "asesor/index.html";
-                    break;
-
-                case "asociado":
-                    window.location.href =
-                        "asociado/index.html";
-                    break;
-            }
-
-        }else{
-            alert("Credenciales incorrectas");
-        }
-
-    } catch(error){
-
-        console.error(error);
-
-        alert(
-            "No se pudo conectar con el servidor"
-        );
-    }
-
+  } catch (error) {
+    console.error("Error de red:", error);
+    alert("No se pudo conectar con el servidor. Verifique que el backend esté corriendo.");
+  }
 });
