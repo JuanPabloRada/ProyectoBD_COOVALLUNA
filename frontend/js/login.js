@@ -24,7 +24,9 @@ form.addEventListener("submit", async (e) => {
       // Guardar nombre en sessionStorage para usarlo en los dashboards
       sessionStorage.setItem("coovalluna_nombre", data.nombre);
       sessionStorage.setItem("coovalluna_rol",    data.rol);
+      sessionStorage.setItem("coovalluna_cedula", cedula);
 
+      
       switch (data.rol) {
         case "admin":    window.location.href = "admin/index.html";    break;
         case "asesor":   window.location.href = "asesor/index.html";   break;

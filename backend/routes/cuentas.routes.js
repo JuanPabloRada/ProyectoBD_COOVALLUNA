@@ -16,7 +16,8 @@ router.get('/', asyncHandler(async (req, res) => {
       fecha_apertura,
       estado,
       cedula_asociado,
-      codigo_agencia
+      codigo_agencia,
+      cedula_empleado
     FROM cuenta_ahorro
     ORDER BY numero_cuenta
   `;
@@ -35,7 +36,8 @@ router.post('/', asyncHandler(async (req, res) => {
     fecha_apertura,
     estado,
     cedula_asociado,
-    codigo_agencia
+    codigo_agencia,
+    cedula_empleado
   } = req.body;
 
   const query = `
@@ -44,9 +46,10 @@ router.post('/', asyncHandler(async (req, res) => {
       fecha_apertura,
       estado,
       cedula_asociado,
-      codigo_agencia
+      codigo_agencia,
+      cedula_empleado
     )
-    VALUES($1,$2,$3,$4,$5)
+    VALUES($1,$2,$3,$4,$5,$6)
     RETURNING *
   `;
 
@@ -55,7 +58,8 @@ router.post('/', asyncHandler(async (req, res) => {
     fecha_apertura,
     estado,
     cedula_asociado,
-    codigo_agencia
+    codigo_agencia,
+    cedula_empleado
   ];
 
   const result = await pool.query(query, values);

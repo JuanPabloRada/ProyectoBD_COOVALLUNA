@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Radicar Crédito</title>
+    <link rel="stylesheet" href="../admin/dashboard.css">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral Sincronizado del Asesor -->
+    <aside class="sidebar" style="background: #0f172a;">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p id="nombreAsesor">Asesor Comercial</p>
+        </div>
+        <nav>
+            <a href="index.html" id="lnkInicio">💼 Inicio Operativo</a>
+            <a href="afiliar.html" id="lnkAsociados">👥 Afiliar Asociado</a>
+            <a href="abrir-cuenta.html" id="lnkCuentas">🏦 Abrir Cuenta</a>
+            <a class="active" href="radicar-credito.html" id="lnkCreditos">💳 Radicar Crédito</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+        <header class="header">
+            <div>
+                <h2>Radicación de Solicitudes de Crédito</h2>
+                <p>Registra una nueva postulación de financiamiento para su respectivo estudio de riesgo</p>
+            </div>
+        </header>
+
+        <!-- Tarjeta del Formulario -->
+        <section class="grid" style="grid-template-columns: 1fr;">
+            <div class="table-card" style="padding: 30px; background: white; border-radius: 8px;">
+                <form id="formRadicarCredito" style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Número de Radicado Único:</label>
+                            <input type="text" id="numero_radicado" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: CR005">
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Cédula del Asociado Solicitante:</label>
+                            <input type="text" id="cedula_asociado" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: 9999">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Línea de Crédito:</label>
+                            <select id="linea_credito" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; cursor: pointer;">
+                                <option value="">-- Selecciona una Línea --</option>
+                                <option value="LIBRE_INVERSION">Libre Inversión</option>
+                                <option value="VIVIENDA">Vivienda</option>
+                                <option value="EDUCACION">Educación</option>
+                                <option value="VEHICULO">Vehículo</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Valor Solicitado ($):</label>
+                            <input type="number" id="valor_solicitado" required min="100000" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: 5000000">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Plazo Solicitado (Meses):</label>
+                            <input type="number" id="plazo_meses" required min="1" max="120" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: 24">
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Tasa de Interés Mensual (%):</label>
+                            <input type="number" id="tasa_interes" step="0.0001" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: 0.0200 para 2%">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                        <button type="submit" style="width: 49%; background: #eab308; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 15px;">
+                            Radicar Solicitud de Crédito
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const nombre = sessionStorage.getItem('coovalluna_nombre') || 'Asesor Comercial';
+        document.getElementById('nombreAsesor').textContent = nombre;
+    });
+
+    document.getElementById('formRadicarCredito').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const cedulaAsesorLogueado = sessionStorage.getItem('coovalluna_cedula') || '1004';
+
+        // Generamos dinámicamente la fecha del día de hoy en formato YYYY-MM-DD
+        const hoy = new Date();
+        const anio = hoy.getFullYear();
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        const fechaRadicacionFormateada = `${anio}-${mes}-${dia}`;
+
+        const nuevoCredito = {
+            numero_radicado: document.getElementById('numero_radicado').value.trim(),
+            fecha_radicacion: fechaRadicacionFormateada, // ENVIADO: Cumple con el NOT NULL de Postgres
+            valor_solicitado: parseFloat(document.getElementById('valor_solicitado').value),
+            valor_aprobado: null, 
+            tasa_interes_mensual: parseFloat(document.getElementById('tasa_interes').value),
+            plazo_meses: parseInt(document.getElementById('plazo_meses').value),
+            estado_credito: 'EN_ESTUDIO', 
+            linea_credito: document.getElementById('linea_credito').value,
+            cedula_asociado: document.getElementById('cedula_asociado').value.trim(),
+            cedula_empleado: cedulaAsesorLogueado
+        };
+
+        try {
+            const res = await fetch('http://localhost:3000/api/creditos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoCredito)
+            });
+
+            if (res.ok || res.status === 201) {
+                alert('¡Solicitud de crédito radicada con éxito en el sistema!');
+                document.getElementById('formRadicarCredito').reset();
+                window.location.href = 'index.html';
+            } else {
+                const err = await res.json();
+                alert('Error al radicar: ' + (err.error || 'Verifica que la cédula del asociado exista en el sistema.'));
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+            alert('No se pudo conectar con el servidor.');
+        }
+    });
+</script>
+</body>
+</html>

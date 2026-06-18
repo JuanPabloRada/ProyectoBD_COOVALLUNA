@@ -9,24 +9,68 @@ function asyncHandler(fn) {
 
 // GET /api/asociados
 router.get('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): SELECT sobre ASOCIADO
   const query = 'SELECT * FROM asociado';
   const result = await pool.query(query);
   res.json(result.rows);
 }));
 
-// POST /api/asociados
+// POST /api/asociados - SOLUCIONADO DEFINITIVAMENTE
 router.post('/', asyncHandler(async (req, res) => {
-  // TODO (equipo): INSERT parametrizado sobre ASOCIADO
-  const query = '';
-  const values = [];
+  const {
+    cedula_asociado,
+    nombres,
+    apellidos,
+    contrasena,
+    fecha_nacimiento,
+    barrio,
+    calle,
+    numero,
+    municipio,
+    fecha_afiliacion,
+    estado,
+    cuota_sostenimiento
+  } = req.body;
+
+  const query = `
+    INSERT INTO asociado (
+      cedula_asociado,
+      nombres,
+      apellidos,
+      contrasena,
+      fecha_nacimiento,
+      barrio,
+      calle,
+      numero,
+      municipio,
+      fecha_afiliacion,
+      estado,
+      cuota_sostenimiento
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    RETURNING *
+  `;
+
+  const values = [
+    cedula_asociado,
+    nombres,
+    apellidos,
+    contrasena,
+    fecha_nacimiento,
+    barrio,
+    calle,
+    numero,
+    municipio,
+    fecha_afiliacion,
+    estado,
+    cuota_sostenimiento
+  ];
+
   const result = await pool.query(query, values);
   res.status(201).json(result.rows[0]);
 }));
 
 // PUT /api/asociados/:cedula
 router.put('/:cedula', asyncHandler(async (req, res) => {
-  // TODO (equipo): UPDATE parametrizado sobre ASOCIADO
   const query = '';
   const values = [];
   const result = await pool.query(query, values);
@@ -36,7 +80,6 @@ router.put('/:cedula', asyncHandler(async (req, res) => {
 // DELETE /api/asociados/:cedula
 router.delete('/:cedula', asyncHandler(async (req, res) => {
   const { cedula } = req.params;
-  // TODO (equipo): DELETE parametrizado sobre ASOCIADO
   const query = '';
   const result = await pool.query(query, [cedula]);
   res.json({ eliminado: result.rowCount > 0 });

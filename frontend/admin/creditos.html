@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Gestión de Créditos</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral Sincronizado -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p>Administrador</p>
+        </div>
+        <nav>
+            <a href="index.html">📊 Dashboard</a>
+            <a href="asociados.html">👥 Asociados</a>
+            <a href="creditos.html" class="active">💳 Créditos</a>
+            <a href="cuentas.html">🏦 Cuentas</a>
+            <a href="empleados.html">👔 Empleados</a>
+            <a href="reportes.html">📑 Reportes</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+        <header class="header">
+            <div>
+                <h2>Gestión de Créditos</h2>
+                <p>Monitoreo de solicitudes, colocación de cartera y estados de radicación</p>
+            </div>
+            <button class="logout">Cerrar sesión</button>
+        </header>
+
+        <!-- Sección de Tabla de Créditos -->
+        <section class="grid" style="grid-template-columns: 1fr;">
+            <div class="table-card" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Radicados Vigentes</h3>
+                    <button style="background: #2563eb; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                        + Radicar Crédito
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Radicado</th>
+                            <th>Línea de Crédito</th>
+                            <th>Asociado (Cédula)</th>
+                            <th>Monto Solicitado</th>
+                            <th>Monto Aprobado</th>
+                            <th>Plazo (Meses)</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCreditosAdmin">
+                        <!-- Los datos de CR001, CR002, etc., se cargarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="creditos.js"></script>
+</body>
+</html>

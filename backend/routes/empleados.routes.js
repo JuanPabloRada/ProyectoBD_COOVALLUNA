@@ -18,7 +18,8 @@ router.get('/', asyncHandler(async (req, res) => {
       correo_corporativo,
       estado_laboral,
       codigo_cargo,
-      codigo_agencia
+      codigo_agencia,
+      salario_base -- AGREGADO DEFINITIVO: Ahora la columna de dinero viaja en la consulta
     FROM empleado
     ORDER BY cedula_empleado
   `;

@@ -9,10 +9,10 @@ function asyncHandler(fn) {
 
 // GET /api/creditos
 router.get('/', asyncHandler(async (req, res) => {
-
   const query = `
     SELECT
       numero_radicado,
+      fecha_radicacion,
       valor_solicitado,
       valor_aprobado,
       tasa_interes_mensual,
@@ -20,22 +20,20 @@ router.get('/', asyncHandler(async (req, res) => {
       estado_credito,
       linea_credito,
       cedula_asociado,
-      cedula_empleado
+      cedula_empleado,
+      codigo_agencia
     FROM credito
     ORDER BY numero_radicado
   `;
-
   const result = await pool.query(query);
-
   res.json(result.rows);
-
 }));
 
 // POST /api/creditos
 router.post('/', asyncHandler(async (req, res) => {
-
   const {
     numero_radicado,
+    fecha_radicacion,
     valor_solicitado,
     valor_aprobado,
     tasa_interes_mensual,
@@ -43,12 +41,14 @@ router.post('/', asyncHandler(async (req, res) => {
     estado_credito,
     linea_credito,
     cedula_asociado,
-    cedula_empleado
+    cedula_empleado,
+    codigo_agencia
   } = req.body;
 
   const query = `
     INSERT INTO credito (
       numero_radicado,
+      fecha_radicacion,
       valor_solicitado,
       valor_aprobado,
       tasa_interes_mensual,
@@ -56,14 +56,16 @@ router.post('/', asyncHandler(async (req, res) => {
       estado_credito,
       linea_credito,
       cedula_asociado,
-      cedula_empleado
+      cedula_empleado,
+      codigo_agencia
     )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING *
   `;
 
   const values = [
     numero_radicado,
+    fecha_radicacion,
     valor_solicitado,
     valor_aprobado,
     tasa_interes_mensual,
@@ -71,13 +73,12 @@ router.post('/', asyncHandler(async (req, res) => {
     estado_credito,
     linea_credito,
     cedula_asociado,
-    cedula_empleado
+    cedula_empleado,
+    codigo_agencia || 'AG001'
   ];
 
   const result = await pool.query(query, values);
-
-  res.status(201).json(result.rows[0]);
-
+  res.status(201).json(result.rows);
 }));
 
 module.exports = router;

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Gestión de Empleados</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral Idéntico -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p>Administrador</p>
+        </div>
+        <nav>
+            <a href="index.html">📊 Dashboard</a>
+            <a href="asociados.html">👥 Asociados</a>
+            <a href="creditos.html">💳 Créditos</a>
+            <a href="cuentas.html">🏦 Cuentas</a>
+            <a href="empleados.html" class="active">👔 Empleados</a>
+            <a href="reportes.html">📑 Reportes</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+        <header class="header">
+            <div>
+                <h2>Gestión de Empleados</h2>
+                <p>Listado y control del personal administrativo y operativo</p>
+            </div>
+            <button class="logout">Cerrar sesión</button>
+        </header>
+
+        <!-- Sección de Tabla -->
+        <section class="grid" style="grid-template-columns: 1fr;">
+            <div class="table-card" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>Personal Registrado</h3>
+                    <button style="background: #2563eb; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                        + Registrar Empleado
+                    </button>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre Completo</th>
+                            <th>Correo Corporativo</th>
+                            <th>Cargo</th>
+                            <th>Agencia</th>
+                            <th>Salario Base</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEmpleadosAdmin">
+                        <!-- Los datos de Carlos, Sandra, Luis, etc., se inyectarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="empleados.js"></script>
+</body>
+</html>

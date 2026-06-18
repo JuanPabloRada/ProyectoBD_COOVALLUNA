@@ -59,6 +59,7 @@ CREATE TABLE EMPLEADO (
     salario_base       DECIMAL(12,2) NOT NULL,
     correo_corporativo VARCHAR(120)  NOT NULL,
     estado_laboral     VARCHAR(20)   NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
     codigo_cargo       CHAR(10)      NOT NULL,
     cedula_supervisor  VARCHAR(15)   NULL,
     codigo_agencia     CHAR(10)      NOT NULL,
@@ -86,6 +87,7 @@ CREATE TABLE ASOCIADO (
     cedula_asociado      VARCHAR(15)   NOT NULL,
     nombres              VARCHAR(80)   NOT NULL,
     apellidos            VARCHAR(80)   NOT NULL,
+    contrasena VARCHAR(100) NOT NULL,
     fecha_nacimiento     DATE          NOT NULL,
     barrio               VARCHAR(80),
     calle                VARCHAR(80),
@@ -184,15 +186,15 @@ CREATE TABLE CUENTA_AHORRO (
     estado           VARCHAR(20) NOT NULL,
     cedula_asociado  VARCHAR(15) NOT NULL,
     codigo_agencia   CHAR(10)    NOT NULL,
-    cedula_empleado  VARCHAR(15) NOT NULL, -- esto se agrego.
+    cedula_empleado  VARCHAR(15) NOT NULL, 
 
     CONSTRAINT pk_cuenta_ahorro PRIMARY KEY (numero_cuenta),
     CONSTRAINT fk_cuenta_asociado FOREIGN KEY (cedula_asociado)
         REFERENCES ASOCIADO (cedula_asociado),
     CONSTRAINT fk_cuenta_agencia FOREIGN KEY (codigo_agencia)
         REFERENCES AGENCIA (codigo_agencia),
-    CONSTRAINT fk_cuenta_empleado FOREIGN KEY (cedula_empleado) -- esto se agrego.
-        REFERENCES EMPLEADO (cedula_empleado),                  -- esto se agrego.
+    CONSTRAINT fk_cuenta_empleado FOREIGN KEY (cedula_empleado) 
+        REFERENCES EMPLEADO (cedula_empleado),                  
     CONSTRAINT chk_cuenta_estado CHECK (
         estado IN ('ACTIVA', 'INACTIVA', 'EMBARGADA')
     )
@@ -200,11 +202,6 @@ CREATE TABLE CUENTA_AHORRO (
 
 
 -- entidad MOVIMIENTO
--- CAMBIO MAYOR: se reemplazaron cuenta_origen y cuenta_destino por un unico campo
--- cuenta_contraparte, que guarda el otro extremo de la transferencia sin repetir
--- lo que ya dice numero_cuenta. Ademas se separo TRANSFERENCIA en dos valores
--- (TRANSFERENCIA_ENTRANTE y TRANSFERENCIA_SALIENTE) para poder calcular el saldo
--- correctamente sin ambiguedad. Se agrego CHECK sobre canal.
 
 CREATE TABLE MOVIMIENTO (
     numero_transaccion CHAR(20)      NOT NULL,
@@ -212,49 +209,42 @@ CREATE TABLE MOVIMIENTO (
     valor_transaccion  DECIMAL(14,2) NOT NULL,
     fecha_hora         TIMESTAMP     NOT NULL,
     canal              VARCHAR(40)   NOT NULL,
-    cuenta_contraparte CHAR(20)      NULL,       -- esto se agrego.
+    cuenta_contraparte CHAR(20)      NULL,      
     numero_cuenta      CHAR(20)      NOT NULL,
 
     CONSTRAINT pk_movimiento PRIMARY KEY (numero_transaccion),
     CONSTRAINT fk_movimiento_cuenta FOREIGN KEY (numero_cuenta)
         REFERENCES CUENTA_AHORRO (numero_cuenta),
-    CONSTRAINT fk_movimiento_contraparte FOREIGN KEY (cuenta_contraparte) -- esto se agrego.
-        REFERENCES CUENTA_AHORRO (numero_cuenta),                         -- esto se agrego.
+    CONSTRAINT fk_movimiento_contraparte FOREIGN KEY (cuenta_contraparte)
+        REFERENCES CUENTA_AHORRO (numero_cuenta),                         
     CONSTRAINT chk_movimiento_tipo CHECK (
         tipo_movimiento IN (
             'DEPOSITO',
             'RETIRO',
-            'TRANSFERENCIA_ENTRANTE',  -- esto se agrego.
-            'TRANSFERENCIA_SALIENTE',  -- esto se agrego.
+            'TRANSFERENCIA_ENTRANTE',  
+            'TRANSFERENCIA_SALIENTE',  
             'PAGO',
             'CONSIGNACION'
         )
     ),
-    CONSTRAINT chk_movimiento_canal CHECK (                                         -- esto se agrego.
-        canal IN ('PRESENCIAL', 'APP_MOVIL', 'CAJERO_AUTOMATICO')                   -- esto se agrego.
-    ),                                                                              -- esto se agrego.
+    CONSTRAINT chk_movimiento_canal CHECK (                                         
+        canal IN ('PRESENCIAL', 'APP_MOVIL', 'CAJERO_AUTOMATICO')                   
+    ),                                                                              
     CONSTRAINT chk_movimiento_valor CHECK (valor_transaccion > 0),
     -- cuenta_contraparte es obligatoria solo en transferencias
-    CONSTRAINT chk_contraparte CHECK (                                              -- esto se agrego.
-        tipo_movimiento NOT IN ('TRANSFERENCIA_ENTRANTE', 'TRANSFERENCIA_SALIENTE') -- esto se agrego.
-        OR cuenta_contraparte IS NOT NULL                                           -- esto se agrego.
-    )                                                                               -- esto se agrego.
+    CONSTRAINT chk_contraparte CHECK (                                              
+        tipo_movimiento NOT IN ('TRANSFERENCIA_ENTRANTE', 'TRANSFERENCIA_SALIENTE') 
+        OR cuenta_contraparte IS NOT NULL                                           
+    )                                                                               
 );
 
 
 -- entidad CREDITO
--- cedula_garante puede ser null si el credito no necesita garante
--- son dos FK distintas a ASOCIADO porque una es el que pide y otra es el que garantiza
--- cedula_empleado es el que tramita el credito, viene de la relacion "tramita" del MER
--- CAMBIO: se agrego codigo_agencia para congelar la agencia de radicacion en el momento
--- del tramite, evitando que un traslado de empleado altere los reportes historicos.
--- CAMBIO: se agrego fecha_radicacion para poder filtrar creditos por periodo incluso
--- cuando aun estan EN_ESTUDIO y fecha_aprobacion es NULL (necesario para reporte 6).
--- CAMBIO: se agrego 'CASTIGADO' al CHECK de estado_credito segun el enunciado.
+
 
 CREATE TABLE CREDITO (
     numero_radicado          CHAR(20)      NOT NULL,
-    fecha_radicacion         DATE          NOT NULL,  -- esto se agrego.
+    fecha_radicacion         DATE          NOT NULL, 
     valor_solicitado         DECIMAL(14,2) NOT NULL,
     valor_aprobado           DECIMAL(14,2),
     tasa_interes_mensual     DECIMAL(6,4)  NOT NULL,
@@ -267,7 +257,7 @@ CREATE TABLE CREDITO (
     cedula_garante           VARCHAR(15),
     fecha_firma_pagare       DATE,
     cedula_empleado          VARCHAR(15)   NOT NULL,
-    codigo_agencia           CHAR(10)      NOT NULL,  -- esto se agrego.
+    codigo_agencia           CHAR(10)      NOT NULL,  
 
     CONSTRAINT pk_credito PRIMARY KEY (numero_radicado),
     CONSTRAINT fk_credito_asociado FOREIGN KEY (cedula_asociado)
@@ -276,12 +266,12 @@ CREATE TABLE CREDITO (
         REFERENCES ASOCIADO (cedula_asociado),
     CONSTRAINT fk_credito_empleado FOREIGN KEY (cedula_empleado)
         REFERENCES EMPLEADO (cedula_empleado),
-    CONSTRAINT fk_credito_agencia FOREIGN KEY (codigo_agencia) -- esto se agrego.
-        REFERENCES AGENCIA (codigo_agencia),                   -- esto se agrego.
+    CONSTRAINT fk_credito_agencia FOREIGN KEY (codigo_agencia) 
+        REFERENCES AGENCIA (codigo_agencia),                   
     CONSTRAINT chk_credito_estado CHECK (
         estado_credito IN ('EN_ESTUDIO', 'APROBADO', 'DESEMBOLSADO',
                            'AL_DIA', 'EN_MORA', 'CANCELADO',
-                           'CASTIGADO')  -- esto se agrego.
+                           'CASTIGADO') 
     ),
     CONSTRAINT chk_credito_val_sol CHECK (valor_solicitado > 0),
     CONSTRAINT chk_credito_val_apr CHECK (valor_aprobado > 0),
@@ -326,7 +316,3 @@ CREATE TABLE ATIENDE (
     CONSTRAINT fk_atiende_asociado FOREIGN KEY (cedula_asociado)
         REFERENCES ASOCIADO (cedula_asociado)
 );
-
--- NOTA: la tabla RADICADO_EN fue eliminada del esquema.
--- La agencia de radicacion de cada credito queda registrada directamente
--- en CREDITO.codigo_agencia, que se congela en el momento del tramite.
