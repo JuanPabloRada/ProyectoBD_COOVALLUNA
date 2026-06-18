@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Panel Admin Asociados</title>
+    <!-- Enlazamos el CSS del dashboard admin para mantener los mismos colores -->
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container" style="display: flex;">
+        <!-- Panel Lateral Idéntico a tu Dashboard Admin -->
+        <aside class="sidebar" style="width: 250px; background: #1e293b; color: white; min-height: 100vh; padding: 20px;">
+            <h2>COOVALLUNA</h2>
+            <nav style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
+                <a href="index.html" style="color: #94a3b8; text-decoration: none;">Dashboard</a>
+                <a href="asociados.html" style="color: white; text-decoration: none; font-weight: bold;">Asociados</a>
+                <a href="#" style="color: #94a3b8; text-decoration: none;">Créditos</a>
+                <a href="#" style="color: #94a3b8; text-decoration: none;">Cuentas</a>
+                <a href="#" style="color: #94a3b8; text-decoration: none;">Empleados</a>
+                <a href="#" style="color: #94a3b8; text-decoration: none;">Reportes</a>
+            </nav>
+        </aside>
+
+        <!-- Contenido de la Gestión de Asociados -->
+        <main class="main-content" style="flex: 1; padding: 40px; background: #f8fafc;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h1>Gestión de Asociados</h1>
+                <button id="btnNuevoAsociado" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    + Nuevo Asociado
+                </button>
+            </header>
+
+            <!-- Tabla donde listaremos a todos -->
+            <div style="background: white; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 20px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b;">
+                            <th style="padding: 12px;">Cédula</th>
+                            <th style="padding: 12px;">Nombre</th>
+                            <th style="padding: 12px;">Municipio</th>
+                            <th style="padding: 12px;">Fecha Afiliación</th>
+                            <th style="padding: 12px;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAsociadosAdmin">
+                        <!-- Aquí se inyectarán los 12 asociados del DML -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Enlazamos el JS de admin que modificaremos abajo -->
+    <script src="asociados.js"></script>
+</body>
+</html>

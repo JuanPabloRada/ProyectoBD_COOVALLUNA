@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Panel Asesor</title>
+    <!-- Reutilizamos el mismo CSS del admin para mantener la consistencia visual -->
+    <link rel="stylesheet" href="../admin/dashboard.css">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral del Asesor -->
+    <aside class="sidebar" style="background: #0f172a;">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p id="nombreAsesor">Asesor Comercial</p>
+        </div>
+
+        <nav>
+    <a class="active" href="index.html" id="lnkInicio">💼 Inicio Operativo</a>
+    <!-- CORRECCIÓN: Quitamos el '../admin/' y apuntamos a archivos locales del asesor -->
+    <a href="afiliar.html" id="lnkAsociados">👥 Afiliar Asociado</a>
+    <a href="abrir-cuenta.html" id="lnkCuentas">🏦 Abrir Cuenta</a>
+    <a href="radicar-credito.html" id="lnkCreditos">💳 Radicar Crédito</a>
+</nav>
+
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+
+        <header class="header">
+            <div>
+                <h2 id="saludoAsesor">Panel de Atención</h2>
+                <p>Módulo operativo para la colocación de productos y servicios</p>
+            </div>
+
+            <button class="logout" id="btnCerrarSesion" style="background: #64748b;">
+                Cerrar sesión
+            </button>
+        </header>
+
+        <!-- Tarjetas de Accesos Rápidos Operativos -->
+        <section class="cards" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            
+            <div class="card" style="border-left: 4px solid #2563eb;">
+                <span>👥</span>
+                <h3>Atención</h3>
+                <p>Registrar y afiliar nuevos asociados a la cooperativa.</p>
+            </div>
+
+            <div class="card" style="border-left: 4px solid #16a34a;">
+                <span>🏦</span>
+                <h3>Captación</h3>
+                <p>Aperturar cuentas de ahorro individuales de forma inmediata.</p>
+            </div>
+
+            <div class="card" style="border-left: 4px solid #eab308;">
+                <span>💳</span>
+                <h3>Colocación</h3>
+                <p>Radicar nuevas solicitudes de crédito para estudio.</p>
+            </div>
+
+        </section>
+
+        <!-- Espacio de trabajo dinámico -->
+        <section class="grid" style="grid-template-columns: 1fr;">
+            <div class="table-card" style="text-align: center; padding: 40px; color: #64748b;">
+                <h3>¡Sesión Iniciada Correctamente!</h3>
+                <p style="margin-top: 10px;">Utiliza el menú lateral izquierdo para realizar los trámites solicitados por el asociado en ventanilla.</p>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="asesor.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Mi Portal Financiero</title>
+    <!-- Reutilizamos los mismos estilos para que todo el proyecto se vea unificado -->
+    <link rel="stylesheet" href="../admin/dashboard.css">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Barra Lateral del Cliente -->
+    <aside class="sidebar" style="background: #047857;"> 
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p id="perfilAsociado">Portal Asociado</p>
+        </div>
+
+        <nav>
+            <a class="active" href="#">🏦 Mis Productos</a>
+            <a href="#" onclick="alert('Usa el botón verde \'Ver Extracto\' al lado de tu cuenta para ver el reporte histórico detallado.')">📑 Extractos</a>
+            <a href="#" id="btnMenuTransferencia">💸 Transferencias</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+
+        <header class="header">
+            <div>
+                <h2 id="saludoAsociado">Bienvenido a tu Cooperativa</h2>
+                <p>Consulta tus saldos, estados de cuenta y radicados de cartera en tiempo real</p>
+            </div>
+
+            <button class="logout" id="btnCerrarSesionAsoc" style="background: #6b7280;">
+                Cerrar sesión
+            </button>
+        </header>
+
+        <!-- Resumen de Productos del Asociado -->
+        <section class="grid" style="grid-template-columns: 1fr 1fr; gap: 30px;">
+            
+            <!-- Bloque de Cuentas de Ahorro -->
+            <div class="table-card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <span style="font-size: 24px;">🏦</span>
+                    <h3>Mis Cuentas de Ahorro</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Número de Cuenta</th>
+                            <th>Apertura</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="misCuentasAhorro">
+                        <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Cargando productos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bloque de Créditos Solicitados -->
+            <div class="table-card">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <span style="font-size: 24px;">💳</span>
+                    <h3>Mis Créditos y Solicitudes</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Radicado</th>
+                            <th>Línea</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="misCreditosAsoc">
+                        <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Cargando solicitudes...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Modal dinámico para visualizar el Extracto de Cuenta -->
+<div id="modalExtracto" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+    <div style="background-color: white; padding: 30px; border-radius: 8px; width: 85%; max-width: 750px; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 5% auto; position: relative;">
+        <span id="cerrarModalExtracto" style="position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; cursor: pointer; color: #64748b;">&times;</span>
+        <h2 id="tituloModalExtracto" style="margin-bottom: 5px; color: #047857;">Extracto de Cuenta</h2>
+        <p id="saldoModalExtracto" style="font-size: 18px; font-weight: bold; margin-bottom: 20px; color: #1e293b;">Saldo Actual: $0</p>
+        
+        <table>
+            <thead>
+                <tr style="border-bottom: 2px solid #cbd5e1; color: #475569;">
+                    <th style="padding: 10px;">Código</th>
+                    <th style="padding: 10px;">Tipo</th>
+                    <th style="padding: 10px;">Canal</th>
+                    <th style="padding: 10px;">Fecha</th>
+                    <th style="padding: 10px; text-align: right;">Valor</th>
+                </tr>
+            </thead>
+            <tbody id="tablaMovimientosExtracto">
+                <!-- Los movimientos de la base de datos se inyectarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal formulario para Realizar Transferencias -->
+<div id="modalTransferencia" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+    <div style="background-color: white; padding: 30px; border-radius: 8px; width: 85%; max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 10% auto; position: relative;">
+        <span id="cerrarModalTrans" style="position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; cursor: pointer; color: #64748b;">&times;</span>
+        <h2 style="margin-bottom: 15px; color: #047857;">Realizar Transferencia</h2>
+        
+        <form id="formTransferirDinero" style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 600; color: #475569;">Cuenta de Origen:</label>
+                <select id="selectCuentaOrigen" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: white;"></select>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 600; color: #475569;">Cuenta de Destino (20 dígitos):</label>
+                <input type="text" id="cuenta_destino" required maxlength="20" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: CTA00000000000000002">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 600; color: #475569;">Monto a Transferir ($):</label>
+                <input type="number" id="monto_transferir" required min="1000" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Monto mínimo $1.000">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: 600; color: #475569;">Canal:</label>
+                <select id="canal_transferencia" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: white;">
+                    <option value="APP_MOVIL">App Móvil</option>
+                    <option value="PORTAL_WEB">Portal Web</option>
+                </select>
+            </div>
+
+            <button type="submit" style="background: #047857; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 15px; margin-top: 10px;">
+                Confirmar y Enviar Dinero
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="asociados.js"></script>
+</body>
+</html>

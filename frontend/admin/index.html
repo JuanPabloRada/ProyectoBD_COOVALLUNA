@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Dashboard</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p>Administrador</p>
+        </div>
+
+        <nav>
+            <!-- ENLACES CORREGIDOS CON SU RESPECTIVO HREF -->
+            <a href="index.html" class="active">📊 Dashboard</a>
+            <a href="asociados.html">👥 Asociados</a>
+            <a href="creditos.html">💳 Créditos</a>
+            <a href="cuentas.html">🏦 Cuentas</a>
+            <a href="empleados.html">👔 Empleados</a>
+            <a href="reportes.html">📑 Reportes</a>
+        </nav>
+
+    </aside>
+
+    <main class="content">
+
+        <header class="header">
+            <div>
+                <h2>Dashboard</h2>
+                <p>Resumen general de la cooperativa</p>
+            </div>
+
+            <button class="logout">
+                Cerrar sesión
+            </button>
+        </header>
+
+        <section class="cards">
+
+            <div class="card">
+                <span>👥</span>
+                <h3 id="asociados">0</h3>
+                <p>Asociados</p>
+            </div>
+
+            <div class="card">
+                <span>💳</span>
+                <h3 id="creditos">0</h3>
+                <p>Créditos</p>
+            </div>
+
+            <div class="card">
+                <span>🏦</span>
+                <h3 id="cuentas">0</h3>
+                <p>Cuentas</p>
+            </div>
+
+            <div class="card">
+                <span>👔</span>
+                <h3 id="empleados">0</h3>
+                <p>Empleados</p>
+            </div>
+
+            <div class="card primary">
+                <span>💰</span>
+                <h3 id="cartera">$0</h3>
+                <p>Cartera Total</p>
+            </div>
+
+            <div class="card danger">
+                <span>⚠️</span>
+                <h3 id="mora">0</h3>
+                <p>Créditos en Mora</p>
+            </div>
+
+        </section>
+
+        <section class="grid">
+
+            <div class="chart-card">
+                <h3>Estados de Créditos</h3>
+                <canvas id="chartEstados"></canvas>
+            </div>
+
+            <div class="table-card">
+
+                <h3>Últimos Créditos</h3>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Radicado</th>
+                            <th>Línea</th>
+                            <th>Estado</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaCreditos"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>

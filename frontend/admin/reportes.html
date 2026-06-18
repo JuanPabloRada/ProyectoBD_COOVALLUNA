@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Panel de Reportes</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* ── Panel de filtros dinámicos ─────────────────────────────── */
+        #panelFiltros {
+            display: none;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .filtro-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 180px;
+        }
+        .filtro-grupo label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .filtro-grupo input,
+        .filtro-grupo select {
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            background: white;
+        }
+        .filtro-grupo input:focus,
+        .filtro-grupo select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px #dbeafe;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p>Administrador</p>
+        </div>
+        <nav>
+            <a href="index.html">📊 Dashboard</a>
+            <a href="asociados.html">👥 Asociados</a>
+            <a href="creditos.html">💳 Créditos</a>
+            <a href="cuentas.html">🏦 Cuentas</a>
+            <a href="empleados.html">👔 Empleados</a>
+            <a href="reportes.html" class="active">📑 Reportes</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+
+        <header class="header">
+            <div>
+                <h2>Módulo de Reportes Gerenciales</h2>
+                <p>Consultas consolidadas, auditorías de cartera y métricas de productividad</p>
+            </div>
+            <button class="logout" onclick="sessionStorage.clear(); window.location.href='../index.html';">
+                Cerrar sesión
+            </button>
+        </header>
+
+        <!-- Selector de Reporte -->
+        <section class="grid" style="grid-template-columns: 1fr; margin-bottom: 0;">
+            <div class="card" style="display: flex; gap: 20px; align-items: center; width: 100%; box-sizing: border-box; flex-wrap: wrap;">
+                <label style="font-weight: 600; color: #475569; white-space: nowrap;">
+                    Selecciona el reporte:
+                </label>
+                <select id="selectorReporte"
+                    style="flex: 1; min-width: 280px; padding: 10px; border-radius: 6px;
+                           border: 1px solid #cbd5e1; font-family: inherit; font-size: 15px; cursor: pointer;">
+                    <option value="">-- Elige una opción --</option>
+                    <option value="asociados-por-estado-agencia">1. Asociados por Estado y Agencia</option>
+                    <option value="extracto-cuenta">2. Extracto de Cuenta de Ahorro</option>
+                    <option value="cartera-por-linea-estado">3. Estado de Cartera por Línea y Estado</option>
+                    <option value="asociados-en-mora">4. Asociados en Mora</option>
+                    <option value="historial-pagos">5. Historial de Pagos de un Crédito</option>
+                    <option value="productividad-asesores">6. Productividad de Asesores por Agencia</option>
+                    <option value="codeudoria-activa">7. Asociados con Codeudoría Activa</option>
+                </select>
+                <button id="btnConsultar"
+                    style="background: #2563eb; color: white; border: none; padding: 10px 25px;
+                           border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 15px;
+                           white-space: nowrap;">
+                    Consultar
+                </button>
+            </div>
+        </section>
+
+        <!-- Panel de filtros dinámico (se muestra según el reporte elegido) -->
+        <section class="grid" style="grid-template-columns: 1fr; margin-top: 16px; margin-bottom: 0;">
+            <div class="card" style="padding: 0; border: none; background: transparent; box-shadow: none;">
+                <div id="panelFiltros">
+                    <div id="filtrosContenido"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabla de Resultados Dinámica -->
+        <section class="grid" style="grid-template-columns: 1fr; margin-top: 16px;">
+            <div class="table-card" style="width: 100%;">
+                <h3 id="tituloReporte">Resultados de la Consulta</h3>
+                <div style="overflow-x: auto; margin-top: 15px;">
+                    <table style="width: 100%;">
+                        <thead id="cabeceraReporte"></thead>
+                        <tbody id="tablaReportesAdmin">
+                            <tr>
+                                <td colspan="100%" style="text-align: center; color: #94a3b8; padding: 30px;">
+                                    Selecciona un reporte arriba y presiona "Consultar" para cargar la información.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="reportes.js"></script>
+</body>
+</html>

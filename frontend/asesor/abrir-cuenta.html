@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOVALLUNA - Abrir Cuenta</title>
+    <link rel="stylesheet" href="../admin/dashboard.css">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Panel Lateral Sincronizado del Asesor -->
+    <aside class="sidebar" style="background: #0f172a;">
+        <div class="logo">
+            <h1>COOVALLUNA</h1>
+            <p id="nombreAsesor">Asesor Comercial</p>
+        </div>
+        <nav>
+            <a href="index.html" id="lnkInicio">💼 Inicio Operativo</a>
+            <a href="afiliar.html" id="lnkAsociados">👥 Afiliar Asociado</a>
+            <a class="active" href="abrir-cuenta.html" id="lnkCuentas">🏦 Abrir Cuenta</a>
+            <a href="radicar-credito.html" id="lnkCreditos">💳 Radicar Crédito</a>
+        </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="content">
+        <header class="header">
+            <div>
+                <h2>Apertura de Cuenta de Ahorros</h2>
+                <p>Asigna un nuevo producto de captación a un asociado registrado en el sistema</p>
+            </div>
+        </header>
+
+        <!-- Tarjeta del Formulario -->
+        <section class="grid" style="grid-template-columns: 1fr;">
+            <div class="table-card" style="padding: 30px; background: white; border-radius: 8px;">
+                <form id="formAbrirCuenta" style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Número de Cuenta (20 dígitos):</label>
+                            <input type="text" id="numero_cuenta" required maxlength="20" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: CTA00000000000000006">
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Cédula del Asociado Titular:</label>
+                            <input type="text" id="cedula_asociado" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" placeholder="Ej: 9999">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Agencia de Registro:</label>
+                            <select id="codigo_agencia" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; cursor: pointer;">
+                                <option value="">-- Selecciona una Agencia --</option>
+                                <option value="AG001">Agencia Central (Bugalagrande)</option>
+                                <option value="AG002">Agencia Tuluá</option>
+                                <option value="AG003">Agencia Cali Norte</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 5px;">
+                            <label style="font-weight: 600; color: #475569;">Estado Inicial:</label>
+                            <select id="estado" required style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; cursor: pointer;">
+                                <option value="ACTIVA">ACTIVA</option>
+                                <option value="INACTIVA">INACTIVA</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                        <button type="submit" style="width: 49%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 15px;">
+                            Efectuar Apertura de Cuenta
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const nombre = sessionStorage.getItem('coovalluna_nombre') || 'Asesor Comercial';
+        document.getElementById('nombreAsesor').textContent = nombre;
+    });
+
+    document.getElementById('formAbrirCuenta').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Tomamos por defecto la cédula del asesor comercial '1004' (Diana Gómez) 
+        // para garantizar la integridad referencial con tu FK de empleados
+        const cedulaAsesorLogueado = sessionStorage.getItem('coovalluna_cedula') || '1004';
+
+        // Generamos la fecha de hoy con el formato estricto YYYY-MM-DD
+        const hoy = new Date();
+        const fechaFormateada = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+
+        const nuevaCuenta = {
+            numero_cuenta: document.getElementById('numero_cuenta').value.trim(),
+            fecha_apertura: fechaFormateada,
+            estado: document.getElementById('estado').value,
+            cedula_asociado: document.getElementById('cedula_asociado').value.trim(),
+            codigo_agencia: document.getElementById('codigo_agencia').value,
+            cedula_empleado: cedulaAsesorLogueado
+        };
+
+        try {
+            const res = await fetch('http://localhost:3000/api/cuentas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevaCuenta)
+            });
+
+            if (res.ok || res.status === 201) {
+                alert('¡Cuenta de ahorros aperturada con éxito en la cooperativa!');
+                document.getElementById('formAbrirCuenta').reset();
+                window.location.href = 'index.html';
+            } else {
+                const err = await res.json();
+                alert('Error al aperturar cuenta: ' + (err.error || 'Verifica que la cédula del asociado exista en el sistema.'));
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+            alert('No se pudo conectar con el servidor.');
+        }
+    });
+</script>
+</body>
+</html>
