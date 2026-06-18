@@ -73,7 +73,18 @@ router.post('/', asyncHandler(async (req, res) => {
 
     // Determinar rol según cargo
     const nombreCargo = emp.nombre_cargo.toUpperCase();
-    const rol = nombreCargo === 'ADMINISTRADOR' ? 'admin' : 'asesor';
+
+let rol;
+
+if(nombreCargo.includes('ADMINISTRADOR')){
+  rol = 'admin';
+}
+else if(nombreCargo.includes('GERENTE')){
+  rol = 'gerente';
+}
+else{
+  rol = 'asesor';
+}
 
     return res.json({
       success: true,

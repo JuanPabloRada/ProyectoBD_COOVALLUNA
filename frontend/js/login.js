@@ -27,13 +27,27 @@ form.addEventListener("submit", async (e) => {
       sessionStorage.setItem("coovalluna_cedula", cedula);
 
       
-      switch (data.rol) {
-        case "admin":    window.location.href = "admin/index.html";    break;
-        case "asesor":   window.location.href = "asesor/index.html";   break;
-        case "asociado": window.location.href = "asociado/index.html"; break;
-        default:
-          alert("Rol desconocido. Contacte soporte.");
-      }
+    switch (data.rol) {
+
+      case "admin":
+        window.location.href = "admin/index.html";
+        break;
+
+      case "gerente":
+        window.location.href = "admin/index.html";
+        break;
+
+      case "asesor":
+        window.location.href = "asesor/index.html";
+        break;
+
+      case "asociado":
+        window.location.href = "asociado/index.html";
+        break;
+
+      default:
+        alert("Rol desconocido. Contacte soporte.");
+    }
     } else {
       // El servidor devuelve data.mensaje cuando success = false
       alert(data.mensaje || "Credenciales incorrectas");
